@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>WebSharper Service Worker Example</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="Content/WebSharper.ServiceWorker.Sample.css" />
+    <style>
+        /* Don't show the not-yet-loaded templates */
+        [ws-template], [ws-children-template] { display: none; }
+    </style>
+    <script type="module" src="Content/WebSharper.ServiceWorker.Sample.head.js"></script>
+</head>
+<body>
+    <h1>Service Worker Example</h1>
+    <div id="main" ws-children-template="Main">
+        <div ws-onafterrender="pageInit">
+            <p>This page will work offline after being loaded once!</p>
+            <p id="status">${status}</p>
+        </div>
+    </div>
+    <script type="module" src="Content/WebSharper.ServiceWorker.Sample.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "WebSharper.ServiceWorker.Sample": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:50558;http://localhost:50559"
+    }
+  }
+}

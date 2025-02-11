@@ -368,7 +368,7 @@ module Definition =
             "addAll" => (!|cacheRequest)?requests ^-> T<Promise<unit>>
             "delete" => cacheRequest?request * !?CacheQueryOptions?options ^-> T<Promise<bool>>
             "keys" => !?cacheRequest?request * !?CacheQueryOptions?options ^-> T<Promise<_>>[!| T<Request>]
-            "match" => cacheRequest?request * !?CacheQueryOptions?options ^-> T<Promise<_>>[!?T<Response>]
+            "match" => cacheRequest?request * !?CacheQueryOptions?options ^-> T<Promise<_>>[T<Response>]
             "matchAll" => !?cacheRequest?request * !?CacheQueryOptions?options ^-> T<Promise<_>>[!| T<Response>]
             "put" => cacheRequest?request * T<Response>?response ^-> T<Promise<unit>>
         ]
@@ -380,7 +380,7 @@ module Definition =
             "has" => T<string>?cacheName ^-> T<Promise<bool>>
             "delete" => T<string>?cacheName ^-> T<Promise<bool>>
             "keys" => T<unit> ^-> T<Promise<_>>[!| T<string>]
-            "match" => cacheRequest?request * !?CacheQueryOptions?options ^-> T<Promise<_>>[!?T<Response>]
+            "match" => cacheRequest?request * !?CacheQueryOptions?options ^-> T<Promise<_>>[T<Response>]
         ]
 
     let Navigator =
