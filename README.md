@@ -26,8 +26,6 @@ The repository consists of two main projects:
 ### Prerequisites
 
 - [.NET SDK](https://dotnet.microsoft.com/download) installed on your machine.
-- Node.js and npm (for building web assets).
-- WebSharper tools.
 
 ### Steps
 
