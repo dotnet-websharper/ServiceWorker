@@ -30,13 +30,11 @@ module Client =
 
     [<SPAEntryPoint>]
     let Main () =
+        async {
+            do! registerServiceWorker().AsAsync()
+        }
+        |> Async.Start
         IndexTemplate.Main()
-            .pageInit(fun () -> 
-                async {
-                    do! registerServiceWorker().AsAsync()
-                }
-                |> Async.Start
-            )
             .status(status.View)
             .Doc()
         |> Doc.RunById "main"

@@ -14,10 +14,8 @@
 <body>
     <h1>Service Worker Example</h1>
     <div id="main" ws-children-template="Main">
-        <div ws-onafterrender="pageInit">
-            <p>This page will work offline after being loaded once!</p>
-            <p id="status">${status}</p>
-        </div>
+        <p>This page will work offline after being loaded once!</p>
+        <p id="status">${status}</p>
     </div>
     <script type="module" src="Content/WebSharper.ServiceWorker.Sample.min.js"></script>
 </body>
