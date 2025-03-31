@@ -96,7 +96,7 @@ module Client =
     let registerServiceWorker() =
         try
             // Access the Service Worker API
-            let serviceWorker = As<Navigator>(JS.Window.Navigator).ServiceWorker
+            let serviceWorker = JS.Window.Navigator.ServiceWorker
 
             // Register the service worker script
             serviceWorker.Register("service-worker.js").Then(fun _ ->

@@ -18,7 +18,7 @@ module Client =
     
     let registerServiceWorker() =
         try
-            let serviceWorker = As<Navigator>(JS.Window.Navigator).ServiceWorker
+            let serviceWorker = JS.Window.Navigator.ServiceWorker
             serviceWorker.Register("service-worker.js").Then(fun _ ->
                 status := "Service Worker registered!"
             ).Catch(fun error ->

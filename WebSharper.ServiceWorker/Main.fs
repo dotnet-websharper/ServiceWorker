@@ -133,6 +133,15 @@ module Definition =
             "state" =? Enum.ServiceWorkerState.Type
 
             "postMessage" => T<obj>?message * !?T<obj>?transfer ^-> T<unit>
+
+            "onerror" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnError instead"
+            "onerror" =@ T<Dom.Event> ^-> T<unit>
+            |> WithSourceName "OnError"
+            "onstatechange" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnStateChange instead"
+            "onstatechange" =@ T<Dom.Event> ^-> T<unit>
+            |> WithSourceName "OnStateChange"
         ]
 
     let SourceType = Client.Type + ServiceWorker.Type + T<MessagePort>
@@ -299,8 +308,13 @@ module Definition =
         |=> Inherits T<Dom.EventTarget>
         |+> Instance [
             "active" =? !? ServiceWorker.Type
+            "backgroundFetch" =? T<obj> // BackgroundFetchManager object
+            "cookies" =? T<obj> // CookieStoreManager object
+            "index" =? T<obj> // ContentIndex object
             "installing" =? !? ServiceWorker.Type
             "navigationPreload" =? NavigationPreloadManager.Type
+            "paymentManager" =? T<obj> // A PaymentManager object
+            "periodicSync" =? T<obj> // A PeriodicSyncManager object
             "pushManger" =? T<obj> // A PushManager object
             "scope" =? T<string>
             "sync" =? T<obj> // A SyncManager object
@@ -311,6 +325,11 @@ module Definition =
             "showNotification" => T<string>?title * !?NotificationOptions?options ^-> T<Promise<unit>>
             "update" => T<unit> ^-> T<Promise<_>>[TSelf]
             "unregister" => T<unit> ^-> T<Promise<bool>>
+
+            "onupdatefound" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnUpdateFound instead"
+            "onupdatefound" =@ T<Dom.Event> ^-> T<unit>
+            |> WithSourceName "OnUpdateFound"
         ]
 
     let ServiceWorkerRegistrationOptions =
@@ -334,11 +353,28 @@ module Definition =
             "getRegistration" => !?T<string>?clientURL ^-> T<Promise<_>>[!?ServiceWorkerRegistration.Type]
             "getRegistrations" => T<unit> ^-> T<Promise<_>>[!| ServiceWorkerRegistration.Type]
             "startMessages" => T<unit> ^-> T<unit>
+
+            "oncontrollerchange" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnControllerChange instead"
+            "oncontrollerchange" =@ T<Dom.Event> ^-> T<unit>      
+            |> WithSourceName "OnControllerChange"
+            "onerror" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnError instead"
+            "onerror" =@ T<Dom.Event> ^-> T<unit>
+            |> WithSourceName "OnError"
+            "onmessage" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnMessage instead"
+            "onmessage" =@ T<MessageEvent> ^-> T<unit>
+            |> WithSourceName "OnMessage"
+            "onmessageerror" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnMessageError instead"
+            "onmessageerror" =@ T<MessageEvent> ^-> T<unit>
+            |> WithSourceName "OnMessageError"
         ]
 
     let ServiceWorkerGlobalScope =
         Class "ServiceWorkerGlobalScope"
-        |=> Inherits T<WorkerGlobalScope>  // Inheriting from WorkerGlobalScope
+        |=> Inherits T<WorkerGlobalScope> 
         |+> Instance [
             "clients" =? Client
             "cookieStore" =? T<obj>  // A CookieStore object instance.
@@ -346,6 +382,83 @@ module Definition =
             "serviceWorker" =? ServiceWorker
 
             "skipWaiting" => T<unit> ^-> T<Promise<unit>>  
+
+            "onactivate" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnActivate instead"
+            "onactivate" =@ ExtendableEvent ^-> T<unit>
+            |> WithSourceName "OnActivate"
+            "onbackgroundfetchabort" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnBackgroundFetchAbort instead"
+            "onbackgroundfetchabort" =@ ExtendableEvent ^-> T<unit> // BackgroundFetchEvent
+            |> WithSourceName "OnBackgroundFetchAbort"
+            "onbackgroundfetchclick" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnBackgroundFetchClick instead"
+            "onbackgroundfetchclick" =@ ExtendableEvent ^-> T<unit> // BackgroundFetchEvent
+            |> WithSourceName "OnBackgroundFetchClick"
+            "onbackgroundfetchfail" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnBackgroundFetchFail instead"
+            "onbackgroundfetchfail" =@ ExtendableEvent ^-> T<unit> // BackgroundFetchUpdateUIEvent
+            |> WithSourceName "OnBackgroundFetchFail"
+            "onbackgroundfetchsuccess" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnBackgroundFetchSuccess instead"
+            "onbackgroundfetchsuccess" =@ ExtendableEvent ^-> T<unit> // BackgroundFetchUpdateUIEvent
+            |> WithSourceName "OnBackgroundFetchSuccess"
+            "oncanmakepayment" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnCanMakePayment instead"
+            "oncanmakepayment" =@ ExtendableEvent ^-> T<unit> // CanMakePaymentEvent
+            |> WithSourceName "OnCanMakePayment"
+            "oncontentdelete" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnContentDelete instead"
+            "oncontentdelete" =@ ExtendableEvent ^-> T<unit> // ContentIndexEvent
+            |> WithSourceName "OnContentDelete"
+            "oncookiechange" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnCookieChange instead"
+            "oncookiechange" =@ ExtendableEvent ^-> T<unit> // ExtendableCookieChangeEvent
+            |> WithSourceName "OnCookieChange"
+            "oninstall" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnInstall instead"
+            "oninstall" =@ ExtendableEvent ^-> T<unit>
+            |> WithSourceName "OnInstall"
+            "onmessage" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnMessage instead"
+            "onmessage" =@ ExtendableMessageEvent ^-> T<unit>
+            |> WithSourceName "OnMessage"
+            "onmessageerror" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnMessageError instead"
+            "onmessageerror" =@ ExtendableMessageEvent ^-> T<unit>
+            |> WithSourceName "OnMessageError"
+            "onnotificationclick" =@ T<unit> ^-> T<unit> 
+            |> ObsoleteWithMessage "Use OnNotificatiOnClick instead"
+            "onnotificationclick" =@ ExtendableEvent ^-> T<unit> // NotificationEvent
+            |> WithSourceName "OnNotificatiOnClick"
+            "onnotificationclose" =@ T<unit> ^-> T<unit> 
+            |> ObsoleteWithMessage "Use OnNotificationClose instead"
+            "onnotificationclose" =@ ExtendableEvent ^-> T<unit> // NotificationEvent
+            |> WithSourceName "OnNotificationClose"
+            "onpaymentrequest" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnPaymentRequest instead"
+            "onpaymentrequest" =@ ExtendableEvent ^-> T<unit> // PaymentRequestEvent
+            |> WithSourceName "OnPaymentRequest"
+            "onperiodicsync" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnPeriodicSync instead"
+            "onperiodicsync" =@ ExtendableEvent ^-> T<unit> // PeriodicSyncEvent
+            |> WithSourceName "OnPeriodicSync"
+            "onpush" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnPush instead"
+            "onpush" =@ ExtendableEvent ^-> T<unit> // PushEvent
+            |> WithSourceName "OnPush"
+            "onpushsubscriptionchange" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnPushSubscriptionChange instead"
+            "onpushsubscriptionchange" =@ T<Dom.Event> ^-> T<unit> 
+            |> WithSourceName "OnPushSubscriptionChange"
+            "onfetch" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnFetch instead"
+            "onfetch" =@ FetchEvent ^-> T<unit>
+            |> WithSourceName "OnFetch"
+            "onsync" =@ T<unit> ^-> T<unit>
+            |> ObsoleteWithMessage "Use OnSync instead"
+            "onsync" =@ ExtendableEvent ^-> T<unit> // SyncEvent
+            |> WithSourceName "OnSync"
         ]
 
     let CacheQueryOptions =
@@ -381,30 +494,6 @@ module Definition =
             "delete" => T<string>?cacheName ^-> T<Promise<bool>>
             "keys" => T<unit> ^-> T<Promise<_>>[!| T<string>]
             "match" => cacheRequest?request * !?CacheQueryOptions?options ^-> T<Promise<_>>[T<Response>]
-        ]
-
-    let Navigator =
-        Class "Navigator"
-        |+> Instance [
-            "serviceWorker" =? ServiceWorkerContainer
-        ]
-
-    let Window = 
-        Class "Window"
-        |+> Instance [
-            "caches" =? CacheStorage
-        ]
-
-    let WorkerGlobalScope = 
-        Class "WorkerGlobalScope"
-        |+> Instance [
-            "caches" =? CacheStorage
-        ]
-
-    let WorkerNavigator = 
-        Class "WorkerNavigator"
-        |+> Instance [
-            "serviceWorker" =? ServiceWorkerContainer
         ]
 
     let Assembly =
@@ -446,11 +535,6 @@ module Definition =
                 Client
                 ExtendableEvent
                 WindowClient
-
-                Navigator
-                Window
-                WorkerGlobalScope
-                WorkerNavigator
             ]
         ]
 
