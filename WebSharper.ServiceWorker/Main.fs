@@ -428,9 +428,9 @@ module Definition =
             "onmessageerror" =@ ExtendableMessageEvent ^-> T<unit>
             |> WithSourceName "OnMessageError"
             "onnotificationclick" =@ T<unit> ^-> T<unit> 
-            |> ObsoleteWithMessage "Use OnNotificatiOnClick instead"
+            |> ObsoleteWithMessage "Use OnNotificationClick instead"
             "onnotificationclick" =@ ExtendableEvent ^-> T<unit> // NotificationEvent
-            |> WithSourceName "OnNotificatiOnClick"
+            |> WithSourceName "OnNotificationClick"
             "onnotificationclose" =@ T<unit> ^-> T<unit> 
             |> ObsoleteWithMessage "Use OnNotificationClose instead"
             "onnotificationclose" =@ ExtendableEvent ^-> T<unit> // NotificationEvent
