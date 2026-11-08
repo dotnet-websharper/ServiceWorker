@@ -15,8 +15,10 @@ tags
     Web JavaScript F# C#
 files
     ../WebSharper.ServiceWorker/bin/Release/netstandard2.0/WebSharper.ServiceWorker.dll ==> lib/netstandard2.0
+    ../WebSharper.ServiceWorker/bin/Release/netstandard2.0/WebSharper.ServiceWorker.websharper ==> lib/netstandard2.0
     ../WebSharper.ServiceWorker/bin/Release/netstandard2.0/WebSharper.ServiceWorker.xml ==> lib/netstandard2.0
     ../WebSharper.ServiceWorker.Extensions/bin/Release/netstandard2.0/WebSharper.ServiceWorker.Extensions.dll ==> lib/netstandard2.0
+    ../WebSharper.ServiceWorker.Extensions/bin/Release/netstandard2.0/WebSharper.ServiceWorker.Extensions.websharper ==> lib/netstandard2.0
     ../WebSharper.ServiceWorker.Extensions/bin/Release/netstandard2.0/WebSharper.ServiceWorker.Extensions.xml ==> lib/netstandard2.0
 dependencies
         WebSharper ~> LOCKEDVERSION:[3]
