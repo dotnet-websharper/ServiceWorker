@@ -40,7 +40,7 @@ jobs:
             --store-password-in-clear-text
 
       - name: Restore dependencies using Paket
-        run: dotnet paket restore
+        run: dotnet paket restore -g Main
 
       - name: Build sample in Release
         run: dotnet build WebSharper.ServiceWorker.Sample/WebSharper.ServiceWorker.Sample.fsproj --configuration Release
