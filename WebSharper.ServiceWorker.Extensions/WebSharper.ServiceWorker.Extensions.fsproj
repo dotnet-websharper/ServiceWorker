@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,16 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="WebSharper" Version="10.1.10.687" />
-    <PackageReference Include="WebSharper.FSharp" Version="10.1.10.687" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\WebSharper.ServiceWorker\WebSharper.ServiceWorker.fsproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="10.1.403" />
-  </ItemGroup>
-
+  <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
