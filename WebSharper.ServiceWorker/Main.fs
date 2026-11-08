@@ -120,8 +120,8 @@ module Definition =
         Class "Clients"
         |+> Instance [
             "claim" => T<unit> ^-> T<Promise<unit>>  
-            "get" => T<string>?id ^-> T<Promise<_>>[Client]  
-            "matchAll" => !?ClientsMatchAllOptions?options ^-> T<Promise<_>>[!? Client]  // Returns all controlled clients
+            "get" => T<string>?id ^-> T<Promise<_>>[!?Client]  
+            "matchAll" => !?ClientsMatchAllOptions?options ^-> T<Promise<_>>[!| Client]  // Resolves to an array of the controlled clients
             "openWindow" => T<string>?url ^-> T<Promise<_>>[!?WindowClient]  // Opens a new window or tab
         ]
 
@@ -315,7 +315,7 @@ module Definition =
             "navigationPreload" =? NavigationPreloadManager.Type
             "paymentManager" =? T<obj> // A PaymentManager object
             "periodicSync" =? T<obj> // A PeriodicSyncManager object
-            "pushManger" =? T<obj> // A PushManager object
+            "pushManager" =? T<obj> // A PushManager object
             "scope" =? T<string>
             "sync" =? T<obj> // A SyncManager object
             "updateViaCache" =? Enum.UpdateViaCache
@@ -376,7 +376,7 @@ module Definition =
         Class "ServiceWorkerGlobalScope"
         |=> Inherits T<WorkerGlobalScope> 
         |+> Instance [
-            "clients" =? Client
+            "clients" =? Clients
             "cookieStore" =? T<obj>  // A CookieStore object instance.
             "registration" =? ServiceWorkerRegistration 
             "serviceWorker" =? ServiceWorker

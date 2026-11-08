@@ -1,131 +1,147 @@
-# WebSharper Service Worker API Binding
+# WebSharper.ServiceWorker
 
-This repository provides an F# [WebSharper](https://websharper.com/) binding for the [Service Worker API](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API), enabling seamless integration of background tasks and offline capabilities in WebSharper applications.
+[![NuGet](https://img.shields.io/badge/nuget-not%20published-lightgrey)](https://github.com/dotnet-websharper/ServiceWorker)
 
-## Repository Structure
+WebSharper bindings for the [Service Worker API](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) —
+registering a service worker, caching assets, and communicating with the page from F# and C# web apps.
 
-The repository consists of two main projects:
+Service workers require a [secure context](https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Secure_Contexts)
+(HTTPS or localhost), so the sample only registers its worker when the page is served from a secure origin.
 
-1. **Binding Project**:
+This repository contains:
 
-   - Contains the F# WebSharper binding for the Service Worker API.
+| Project | Purpose |
+| --- | --- |
+| `WebSharper.ServiceWorker` | The binding: WIG definitions for `ServiceWorker`, `ServiceWorkerRegistration`, `ServiceWorkerContainer`, `ServiceWorkerGlobalScope`, `Cache`, `CacheStorage`, `ExtendableEvent`, `FetchEvent`, `ExtendableMessageEvent`, `Client`, `WindowClient`, and their option dictionaries. |
+| `WebSharper.ServiceWorker.Extensions` | `[<Inline>]` client extensions: `navigator.serviceWorker`, `window.caches`, and `workerGlobalScope.caches`. |
+| `WebSharper.ServiceWorker.Sample` | An ASP.NET Core SPA that registers a service worker and caches the page for offline use. |
 
-2. **Sample Project**:
-   - Demonstrates how to use the Service Worker API with WebSharper syntax.
-   - Includes a GitHub Pages demo: [View Demo](https://dotnet-websharper.github.io/ServiceWorker/).
+## Live demos
+
+**Try it live:** [Open the sample in your browser](https://dotnet-websharper.github.io/ServiceWorker/)
+
+![Service Worker API sample](docs/sample.png)
+
+The sample doubles as the binding's test case: it registers the service worker and reports the registration status in the page.
+
+- **Sample (this repository):** <https://dotnet-websharper.github.io/ServiceWorker/>
+- **Source repository:** <https://github.com/dotnet-websharper/ServiceWorker>
+- **WebSharper bindings:** <https://websharper.com/bindings>
 
 ## Features
 
-- WebSharper bindings for the Service Worker API.
-- Background task handling and caching for offline applications.
-- Example usage for registering, updating, and communicating with service workers.
-- Hosted demo to explore API functionality.
+- `ServiceWorker` (`scriptURL`, `state`, `postMessage`, `onstatechange`, `onerror`).
+- `ServiceWorkerRegistration` (`active`, `installing`, `waiting`, `scope`, `update`, `unregister`, `getNotifications`, `showNotification`, `navigationPreload`).
+- `ServiceWorkerContainer` (`register`, `getRegistration`, `getRegistrations`, `ready`, `controller`, `startMessages`, and the message events).
+- `ServiceWorkerGlobalScope` (`clients`, `registration`, `serviceWorker`, `skipWaiting`, and the install/activate/fetch/message/push/notification event hooks).
+- `Cache` and `CacheStorage` (`open`, `add`, `addAll`, `match`, `matchAll`, `put`, `delete`, `keys`).
+- `ExtendableEvent`, `FetchEvent`, `ExtendableMessageEvent`, `Client`, `WindowClient`, and their option dictionaries.
+- `navigator.serviceWorker`, `window.caches`, and `workerGlobalScope.caches` in the Extensions assembly.
 
-## Installation and Building
+## Installation
 
-### Prerequisites
+The binding is not currently published to NuGet. Reference the projects from source:
 
-- [.NET SDK](https://dotnet.microsoft.com/download) installed on your machine.
+```bash
+git clone https://github.com/dotnet-websharper/ServiceWorker.git
+```
 
-### Steps
+```xml
+<ItemGroup>
+  <ProjectReference Include="path/to/WebSharper.ServiceWorker/WebSharper.ServiceWorker.fsproj" />
+  <ProjectReference Include="path/to/WebSharper.ServiceWorker.Extensions/WebSharper.ServiceWorker.Extensions.fsproj" />
+</ItemGroup>
+```
 
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/dotnet-websharper/ServiceWorker.git
-   cd ServiceWorker
-   ```
-
-2. Build the Binding Project:
-
-   ```bash
-   dotnet build WebSharper.ServiceWorker/WebSharper.ServiceWorker.fsproj
-   ```
-
-3. Build and Run the Sample Project:
-
-   ```bash
-   cd WebSharper.ServiceWorker.Sample
-   dotnet build
-   dotnet run
-   ```
-
-4. Open the hosted demo to see the Sample project in action:
-   [https://dotnet-websharper.github.io/ServiceWorker/](https://dotnet-websharper.github.io/ServiceWorker/)
-
-## Why Use the Service Worker API
-
-The Service Worker API allows web applications to run background tasks and support offline functionality. Key benefits include:
-
-1. **Offline Support**: Cache assets and serve them when there is no network connectivity.
-2. **Background Sync**: Perform tasks like syncing data even when the app is closed.
-3. **Push Notifications**: Receive real-time updates without keeping the app open.
-4. **Performance Optimization**: Reduce network requests by intercepting and caching them.
-
-**Note:** Ensure your web server supports HTTPS, as service workers require a secure context to function.
-
-Integrating the Service Worker API with WebSharper allows developers to build robust, high-performance web applications in F#.
-
-## How to Use the Service Worker API
-
-### Example Usage
-
-Below is an example of how to use the Service Worker API in a WebSharper project:
+## Usage
 
 ```fsharp
-namespace WebSharper.ServiceWorker.Sample
+namespace WebSharper.ServiceWorker.Demo
 
 open WebSharper
 open WebSharper.JavaScript
-open WebSharper.UI
-open WebSharper.UI.Notation
-open WebSharper.UI.Client
-open WebSharper.UI.Templating
 open WebSharper.ServiceWorker
 
 [<JavaScript>]
-module Client =
-    // The templates are loaded from the DOM, so you just can edit index.html
-    // and refresh your browser, no need to recompile unless you add or remove holes.
-    type IndexTemplate = Template<"wwwroot/index.html", ClientLoad.FromDocument>
+module Demo =
+    let register () =
+        JS.Window.Navigator.ServiceWorker.Register("service-worker.js")
+            .Then(fun _ -> Console.Log("Service worker registered."))
+            .Catch(fun error -> Console.Error(error))
 
-    // Variable to store the service worker registration status
-    let status = Var.Create "Checking service worker..."
-
-    // Function to register the service worker
-    let registerServiceWorker() =
-        try
-            // Access the Service Worker API
-            let serviceWorker = JS.Window.Navigator.ServiceWorker
-
-            // Register the service worker script
-            serviceWorker.Register("service-worker.js").Then(fun _ ->
-                status := "Service Worker registered!"
-            ).Catch(fun error ->
-                status := $"Service Worker failed: {error}"
-            )
-        with error -> promise {
-            // Handle errors that may occur during service worker registration
-            status := $"Service Workers error: {error.Message}."
+    let openCache () =
+        promise {
+            let! cache = JS.Window.Caches.Open("my-cache")
+            do! cache.AddAll([| "/"; "/index.html" |])
+            return ()
         }
-
-    [<SPAEntryPoint>]
-    let Main () =
-        // Initialize the UI template and bind variables to UI elements
-        IndexTemplate.Main()
-            // Call the service worker registration function on page load
-            .pageInit(fun () ->
-                async {
-                    do! registerServiceWorker().AsAsync()
-                }
-                |> Async.Start
-            )
-            // Bind the status variable to display the registration status
-            .status(status.View)
-            .Doc()
-        |> Doc.RunById "main"
 ```
 
-This example demonstrates how to register a service worker and handle registration status dynamically.
+The `serviceWorker` and `caches` accessors are declared in the Extensions assembly and hang off
+`JS.Window.Navigator`, `JS.Window`, and `WorkerGlobalScope`. Register a worker script, then use the
+`Cache` / `CacheStorage` types to cache requests and responses.
 
-For a complete implementation, refer to the [Sample Project](https://dotnet-websharper.github.io/ServiceWorker/).
+## Running the sample
+
+Build the sample in Release and serve its static output:
+
+```bash
+dotnet build WebSharper.ServiceWorker.Sample/WebSharper.ServiceWorker.Sample.fsproj -c Release
+python3 -m http.server -d WebSharper.ServiceWorker.Sample/wwwroot 8099
+```
+
+Open <http://localhost:8099/>. Localhost counts as a secure context, so the service worker registers.
+
+Alternatively, run the ASP.NET Core host:
+
+```bash
+dotnet run --project WebSharper.ServiceWorker.Sample
+```
+
+## Building from source
+
+### Prerequisites
+
+- [.NET SDK 10](https://dotnet.microsoft.com/download) or later.
+
+### Build
+
+```bash
+dotnet build WebSharper.ServiceWorker.sln -c Release
+```
+
+The binding projects target `netstandard2.0`; the sample targets `net10.0`.
+
+## Deployment
+
+Pushing to `main` triggers `.github/workflows/ghpages.yml`, which builds the sample in Release and publishes
+`WebSharper.ServiceWorker.Sample/wwwroot` to the `gh-pages` branch.
+
+## Repository layout
+
+```
+WebSharper.ServiceWorker/              # binding (WIG definitions)
+  Main.fs
+WebSharper.ServiceWorker.Extensions/   # [<Inline>] client extensions
+  Library.fs
+WebSharper.ServiceWorker.Sample/       # ASP.NET Core SPA demo
+  Client.fs
+  Startup.fs
+  wwwroot/
+    index.html
+    service-worker.js
+    site.css
+.github/workflows/ghpages.yml      # build + deploy the sample to GitHub Pages
+```
+
+## Notes on the API
+
+- **Secure context:** service workers are only available in secure contexts. Serve the page over HTTPS or from localhost.
+- **Scope:** `register()` returns a `Promise<ServiceWorkerRegistration>`; the worker's scope defaults to the script's directory.
+- **Lifecycle:** the `install`, `activate`, and `fetch` events are handled in the worker script. `ExtendableEvent.waitUntil()` keeps the event alive while the work completes.
+- **Caching:** `CacheStorage.open()` returns a `Cache`; use `addAll()` / `put()` to store requests and `match()` to serve them from the worker.
+- **Updates:** call `registration.update()` to check for a new worker script; `skipWaiting()` and `clients.claim()` take control immediately.
+
+## License
+
+Apache 2.0 — see [LICENSE.md](LICENSE.md).

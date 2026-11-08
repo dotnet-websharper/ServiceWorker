@@ -1,22 +1,42 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>WebSharper Service Worker Example</title>
+    <title>WebSharper Service Worker Demo</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%234f46e5'/%3E%3Cpath d='M8 2.2a5.8 5.8 0 1 0 5.8 5.8h-2.1A3.7 3.7 0 1 1 8 4.3V2.2z' fill='white'/%3E%3C/svg%3E" />
     <link rel="stylesheet" type="text/css" href="Content/WebSharper.ServiceWorker.Sample.css" />
-    <style>
-        /* Don't show the not-yet-loaded templates */
-        [ws-template], [ws-children-template] { display: none; }
-    </style>
+    <link rel="stylesheet" type="text/css" href="site.css" />
     <script type="module" src="Content/WebSharper.ServiceWorker.Sample.head.js"></script>
 </head>
 <body>
-    <h1>Service Worker Example</h1>
-    <div id="main" ws-children-template="Main">
-        <p>This page will work offline after being loaded once!</p>
-        <p id="status">${status}</p>
-    </div>
+    <main class="page">
+        <header class="hero">
+            <h1>Service Worker API Demo</h1>
+            <p class="lede">
+                Register a service worker and cache this page for offline use with the
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API" target="_blank" rel="noreferrer">Service Worker API</a>.
+                Service workers require a secure context (HTTPS or localhost).
+            </p>
+        </header>
+
+        <section class="card">
+            <h2>Registration</h2>
+            <p class="hint">The page registers <code>service-worker.js</code> on load and caches the page for offline use.</p>
+            <p class="status" role="status">${status}</p>
+        </section>
+
+        <section class="card">
+            <h2>Try offline</h2>
+            <p class="hint">Once the worker is installed, stop the server and reload — the page should still load from the cache.</p>
+            <ul class="readout">
+                <li>Offline support</li>
+                <li>Background sync</li>
+                <li>Push notifications</li>
+                <li>Performance optimization</li>
+            </ul>
+        </section>
+    </main>
     <script type="module" src="Content/WebSharper.ServiceWorker.Sample.min.js"></script>
 </body>
 </html>
